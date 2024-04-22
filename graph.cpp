@@ -18,6 +18,20 @@ using namespace::std;
 #define vertex_radius 6.5
 #define private public
 
+    Graph::Graph() {
+    {
+        initialize_graph();
+        int sum = 0;
+        for (auto p: vertices) {
+            sum += p.second.size();
+        }
+        numEdges = sum / 2;
+        cout << "Num of edges: " << numEdges << endl;
+        numVertices = vertices.size();
+        cout << "Num of vertices: " << numVertices << endl;
+    };
+}
+
 void Graph::initialize_graph() {
     // Random number generation taken from
     // https://stackoverflow.com/questions/7560114/random-number-c-in-some-range
@@ -88,6 +102,7 @@ void Graph::initialize_graph() {
         }
         out:;
     }
+
 }
 
 float Graph::Dijkstras(pair<int, int> from, pair<int, int> to) {
@@ -112,7 +127,7 @@ float Graph::Dijkstras(pair<int, int> from, pair<int, int> to) {
         for (auto i: vertices[u] ) {
             pair<int, int> v = i.first;
             float w = i.second;
-            if (d[u] + w < d[v]) {
+            if (d[u] + w < d[v] || d[v] == 0) {
 
                 d[v] = d[u] + w;
                 p[v] = u;
@@ -121,22 +136,34 @@ float Graph::Dijkstras(pair<int, int> from, pair<int, int> to) {
         }
     }
 
-    std::stack<float> path;
-    pair<int, int> val = to;
-    while (val != from) {
-        path.push(d[val]);
-        val = p[val];
-    }
-
-    float sum = 0;
-    while (!path.empty()) {
-        sum += path.top();
-        path.pop();
-    }
-
-    return sum;
+    return d[to];
 }
 
-void Graph::A_star(pair<int, int> from, pair<int, int> to) {
+float Graph::Bellman_Ford(pair<int, int> from, pair<int, int> to) {
+    /*
+        returns the sum of weights of all edges of shortest path
+        connecting the from and to vertex. Returns 0 if no edges
+        connect the two vertices.
+        sources: https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/
+    */
+    map<pair<int, int>, float> d;
+    d[from] = 0;
+    map<pair<int, int>, pair<int, int>> p;
 
+
+    // Step 2: Relax all edges |V| - 1 times. A simple
+    // shortest path from src to any other vertex can have
+    // at-most |V| - 1 edges
+    for (auto i: vertices) {
+        for (auto j: vertices[i.first]) {
+            pair<int, int> u = i.first;
+            pair<int, int> v = j.first;
+            float weight = j.second;
+            if (d[u] != 0
+                && d[u] + weight < d[v])
+                d[v] = d[u] + weight;
+        }
+    }
+
+    return d[to];
 }

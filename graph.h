@@ -24,13 +24,12 @@ private:
     // This method generates the 100,000 vertices in our graph,
     // as well as the edges to go along with them.
     void initialize_graph();
+    int numEdges;
+    int numVertices;
 
 public:
-    Graph() {
-        initialize_graph();
-    };
-
+    Graph();
     // returns sum of shortest distance
     float Dijkstras(pair<int, int> from, pair<int, int> to);
-    float A_star(pair<int, int> from, pair<int, int> to);
+    float Bellman_Ford(pair<int, int> from, pair<int, int> to);
 };

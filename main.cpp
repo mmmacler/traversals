@@ -31,17 +31,6 @@ int main() {
     sf::CircleShape shape(10.f);
     shape.setFillColor(sf::Color::Green);
 
-     
-    //this block may be useful for testing.
-    int sum = 0;
-    for (auto p: my_graph->vertices) {
-        sum += p.second.size();
-    }
-
-    cout << "Num of edges: " << (sum/2) << endl;
-    cout << "Num of vertices: " << my_graph->vertices.size() << endl;
-    /**/
-
     while(window.isOpen())
     {
         sf::Event event;
