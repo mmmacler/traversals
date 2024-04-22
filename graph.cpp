@@ -11,26 +11,12 @@
 using namespace::std;
 //#define x_max 1840
 //#define y_max 1000
-#define x_max 400
-#define y_max 300
+#define x_max 300
+#define y_max 170
 
 #define multiplier 14
 #define vertex_radius 6.5
 #define private public
-
-    Graph::Graph() {
-    {
-        initialize_graph();
-        int sum = 0;
-        for (auto p: vertices) {
-            sum += p.second.size();
-        }
-        numEdges = sum / 2;
-        cout << "Num of edges: " << numEdges << endl;
-        numVertices = vertices.size();
-        cout << "Num of vertices: " << numVertices << endl;
-    };
-}
 
 void Graph::initialize_graph() {
     // Random number generation taken from
@@ -56,7 +42,7 @@ void Graph::initialize_graph() {
     //Generate edges and their weights
     for (auto p: this->vertices) {
         //counter for how many other valid vertices we've found
-        int found = 0;
+        int found = p.second.size();
         //just aliasing to shorter variable names
         int my_x = p.first.first;
         int my_y = p.first.second;
@@ -64,13 +50,16 @@ void Graph::initialize_graph() {
         // check a 17x17 area around the vertex for other vertices
         // we look further out first to avoid the problem of creating
         // isolated clusters of vertices.
-        for(int i = 8; i >= -8; i-- ) {
-            for(int j = 8; j >= -8; j-- ) {
+        int search_radius = 9;
+        for(int i = search_radius; i >= -search_radius; i-- ) {
+            for(int j = search_radius; j >= -search_radius; j-- ) {
 
                 // check that a vertex exists as that point, we don't already have an edge
                 // connecting the two vertices, and that we're not adding a loop
                 if ((vertices.find({my_x+i, my_y+j}) != vertices.end() &&
                      p.second.find({my_x+i, my_y+j}) == p.second.end()) &&
+                     found < 3 &&
+                     vertices.find({my_x+i, my_y+j})->second.size() < 2 && 
                     (i != 0 || j != 0)) {
 
                     // find the distance between the two points with pythagorean theorem
@@ -102,7 +91,6 @@ void Graph::initialize_graph() {
         }
         out:;
     }
-
 }
 
 float Graph::Dijkstras(pair<int, int> from, pair<int, int> to) {
