@@ -105,7 +105,8 @@ float Graph::Dijkstras(pair<int, int> from, pair<int, int> to) {
         sources: https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
     */
 
-    priority_queue<pair<pair<int, int>, int>, vector<pair<pair<int,int>, int>>, greater<>> pq;
+    // priority queue stores minimum distance to be relaxed
+    priority_queue<pair<pair<int, int>, float>, vector<pair<pair<int,int>, int>>, greater<>> pq;
     map<pair<int, int>, float> d;
     d[from] = 0;
     map<pair<int, int>, pair<int, int>> p;
@@ -115,12 +116,11 @@ float Graph::Dijkstras(pair<int, int> from, pair<int, int> to) {
     while (!pq.empty()) {
         pair<int, int> u = pq.top().first;
         pq.pop();
-
+        //cout << vertices[u].size() << endl;
         for (auto i: vertices[u] ) {
             pair<int, int> v = i.first;
             float w = i.second;
             if (d[u] + w < d[v] || d[v] == 0) {
-
                 d[v] = d[u] + w;
                 p[v] = u;
                 pq.emplace(v, d[v]);
