@@ -1,9 +1,7 @@
 #include <SFML/Graphics/PrimitiveType.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
-#include <cmath>
 #include <iostream>
 #include <map>
-#include <random>
 #include <SFML/Graphics.hpp>
 #include "graph.h"
 using namespace::std;
@@ -38,7 +36,7 @@ int main() {
     //this block may be useful for testing.
     int sum = 0;
     for (auto p: my_graph->vertices) {
-        sum += p.second.adjacent_vertices.size();
+        sum += p.second.size();
     }
 
     cout << "Num of edges: " << (sum/2) << endl;
