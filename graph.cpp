@@ -31,12 +31,13 @@ void Graph::initialize_graph() {
         int x = distr(gen);
         std::uniform_int_distribution<> distr(-(y_max/2), y_max/2);
         int y = distr(gen);
-        //Vertex temp;
-        //vertices.insert({{x, y}, temp});
+        map<pair<int, int>, float> temp;
+        vertices.insert({{x, y}, temp});
     }
 
     //Generate edges and their weights
     for (auto p: this->vertices) {
+        //counter for how many other valid vertices we've found
         int found = 0;
         //just aliasing to shorter variable names
         int my_x = p.first.first;
@@ -71,7 +72,9 @@ void Graph::initialize_graph() {
 
                     //below is useful for testing.
                     cout << "edge connecting (" << my_x << ", " << my_y << ") to (" << my_x+i << ", " << my_y+j << ")" << endl;
+
                     found++;
+                    // we don't want to add more than 3 edges to this node right now
                     if (found == 3) {
                         // necessary evil as we need to break out of two loops
                         goto out;
