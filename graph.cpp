@@ -1,4 +1,4 @@
-#include <SFML/Graphics/RectangleShape.hpp>
+z#include <SFML/Graphics/RectangleShape.hpp>
 #include <cmath>
 #include <iostream>
 #include <map>
@@ -46,7 +46,7 @@ void Graph::initialize_graph() {
         int my_x = p.first.first;
         int my_y = p.first.second;
 
-        // check a 17x17 area around the vertex for other vertices
+        // check a 19x19 area around the vertex for other vertices
         // we look further out first to avoid the problem of creating
         // isolated clusters of vertices.
         int search_radius = 9;
@@ -58,12 +58,12 @@ void Graph::initialize_graph() {
                 if ((vertices.find({my_x+i, my_y+j}) != vertices.end() &&
                      p.second.find({my_x+i, my_y+j}) == p.second.end()) &&
                      found < 3 &&
-                     vertices.find({my_x+i, my_y+j})->second.size() < 2 && 
+                     vertices.find({my_x+i, my_y+j})->second.size() < 4 && 
                     (i != 0 || j != 0)) {
 
                     // find the distance between the two points with pythagorean theorem
                     int a2 = (my_x-my_x+i)*(my_x-my_x+i);
-                    int b2 = (my_y-my_y+i)*(my_y-my_y+i);
+                    int b2 = (my_y-my_y+j)*(my_y-my_y+j);
                     float c2 = sqrt(a2+b2);
 
                     // generate a random multiplier for the weight of this edge (to spice things up)
@@ -71,13 +71,14 @@ void Graph::initialize_graph() {
                     float weight = c2*r2;
 
                     // we have a new edge,
-                    p.second.insert({{my_x+i,my_y+i}, weight});
+                    //p.second.insert({{my_x+i, my_y+j}, weight});
+                    (vertices.find({my_x, my_y}))->second.insert({{my_x+i, my_y+j}, weight});
 
                     // as does the edge we're linking to
-                    vertices.find({my_x+i, my_y+j})->second.insert({{my_x, my_y}, weight});
+                    (vertices.find({my_x+i, my_y+j}))->second.insert({{my_x, my_y}, weight});
 
                     //below is useful for testing.
-                    cout << "edge connecting (" << my_x << ", " << my_y << ") to (" << my_x+i << ", " << my_y+j << ")" << endl;
+                    //cout << "edge connecting (" << my_x << ", " << my_y << ") to (" << my_x+i << ", " << my_y+j << ")" << endl;
 
                     found++;
                     // we don't want to add more than 3 edges to this node right now
