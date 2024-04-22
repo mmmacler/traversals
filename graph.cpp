@@ -137,6 +137,7 @@ float Graph::Dijkstras(pair<int, int> from, pair<int, int> to) {
     return sum;
 }
 
-void Graph::A_star(pair<int, int> from, pair<int, int> to) {
+float Graph::A_star(pair<int, int> from, pair<int, int> to) {
 
+return 0;
 }
