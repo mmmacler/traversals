@@ -1,29 +1,43 @@
 #include <SFML/Graphics/PrimitiveType.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <cmath>
 #include <iostream>
+#include <iterator>
 #include <map>
 #include <SFML/Graphics.hpp>
 #include "graph.h"
 using namespace::std;
 //#define x_max 1840
 //#define y_max 1000
-#define x_max 40
-#define y_max 30
+#define x_max 300
+#define y_max 170
 
+// settings for how to draw vertices and edges
 #define multiplier 14
 #define vertex_radius 6.5
-#define private public
+#define line_thickness 4
 
-// a utility function to draw lines with SFML
-void draw_line(pair<int, int> p1, pair<int, int> p2, sf::Color color, sf::Window& window) {
-    //this is a basic test of functionality
+// a utility function to draw lines with SFML since one isn't included
+void draw_line(pair<int, int> p1, pair<int, int> p2, sf::Color color, sf::RenderWindow& window) {
+    int a2 = (p1.first-p2.first)*(p1.first-p2.first);
+    int b2 = (p1.second-p2.second)*(p1.second-p2.second);
+    float c2 = sqrt(a2+b2);
+    
+    float y = p2.second - p1.second;
+    float x = p2.first - p1.first;
+    float rotation = (atan2(y, x))*57.3;
 
-
-
+    sf::RectangleShape rectangle;
+    rectangle.setSize({c2*multiplier, line_thickness});
+    rectangle.setPosition((p1.first*multiplier), (p1.second*multiplier));
+    rectangle.setRotation(rotation);
+    rectangle.setFillColor(color);
+    window.draw(rectangle);
 };
 
 int main() {
+    // allocate on the heap
     Graph* my_graph = new Graph();
     
     // opens the window at 1840x1000 resolution with the title "Traversals"
@@ -31,15 +45,8 @@ int main() {
 
     // have the window display a 'View' rather than the raw objects
     // this is like having a movable camera show what's being rendered
-    // and offers much better flexibility for things like zooming in 
-    // and moving around
     sf::View view({0, 0}, {x_max*multiplier, y_max*multiplier});
     window.setView(view);
-
-    // default SFML example circle, left in as a nice marking for where
-    // the center of the view is
-    sf::CircleShape shape(10.f);
-    shape.setFillColor(sf::Color::Green);
 
     while(window.isOpen())
     {
@@ -54,7 +61,6 @@ int main() {
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
                     cout << "Dijkstra's Algorithm" << endl;
-
                 }
             }
             else if(event.type == sf::Event::Closed) {
@@ -63,22 +69,20 @@ int main() {
         }
 
         window.clear();
-        window.draw(shape);
-
-        // very bad and very slow and very temporary way to draw every vertex
-        // (redraws every frame unnecessarily)
-        for(auto p: my_graph->vertices) {
+        for(auto iter: my_graph->vertices) {
             
             // draw vertices
             sf::CircleShape temp(vertex_radius, 20);
-            temp.setPosition(p.first.first*multiplier, p.first.second*multiplier);
+            temp.setOrigin(temp.getRadius(), temp.getRadius());
+            temp.setPosition(iter.first.first*multiplier, iter.first.second*multiplier);
             window.draw(temp);
 
-            //draw edges (TODO)
+            //draw edges
+            for (auto edge: iter.second) {
+                draw_line(iter.first, edge.first, sf::Color::White, window);
+            }
         }
-
         window.display();
     }
     return 0;
 }
-
