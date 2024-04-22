@@ -1,9 +1,6 @@
-#include <SFML/Graphics/PrimitiveType.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
-#include <cmath>
 #include <iostream>
 #include <map>
-#include <random>
 #include <SFML/Graphics.hpp>
 #include "graph.h"
 using namespace::std;
