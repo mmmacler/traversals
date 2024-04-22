@@ -35,7 +35,7 @@ int main() {
     //this block may be useful for testing.
     int sum = 0;
     for (auto p: my_graph->vertices) {
-        sum += p.second.adjacent_vertices.size();
+        sum += p.second.size();
     }
 
     cout << "Num of edges: " << (sum/2) << endl;

@@ -31,12 +31,13 @@ void Graph::initialize_graph() {
         int x = distr(gen);
         std::uniform_int_distribution<> distr(-(y_max/2), y_max/2);
         int y = distr(gen);
-        Vertex temp;
+        map<pair<int, int>, float> temp;
         vertices.insert({{x, y}, temp});
     }
 
     //Generate edges and their weights
     for (auto p: this->vertices) {
+        //counter for how many other valid vertices we've found
         int found = 0;
         //just aliasing to shorter variable names
         int my_x = p.first.first;
@@ -51,7 +52,7 @@ void Graph::initialize_graph() {
                 // check that a vertex exists as that point, we don't already have an edge
                 // connecting the two vertices, and that we're not adding a loop
                 if ((vertices.find({my_x+i, my_y+j}) != vertices.end() &&
-                     p.second.adjacent_vertices.find({my_x+i, my_y+j}) == p.second.adjacent_vertices.end()) &&
+                     p.second.find({my_x+i, my_y+j}) == p.second.end()) &&
                     (i != 0 || j != 0)) {
 
                     // find the distance between the two points with pythagorean theorem
@@ -64,14 +65,16 @@ void Graph::initialize_graph() {
                     float weight = c2*r2;
 
                     // we have a new edge,
-                    p.second.adjacent_vertices.insert({{my_x+i,my_y+i}, weight});
+                    p.second.insert({{my_x+i,my_y+i}, weight});
 
                     // as does the edge we're linking to
-                    vertices.find({my_x+i, my_y+j})->second.adjacent_vertices.insert({{my_x, my_y}, weight});
+                    vertices.find({my_x+i, my_y+j})->second.insert({{my_x, my_y}, weight});
 
                     //below is useful for testing.
                     cout << "edge connecting (" << my_x << ", " << my_y << ") to (" << my_x+i << ", " << my_y+j << ")" << endl;
+
                     found++;
+                    // we don't want to add more than 3 edges to this node right now
                     if (found == 3) {
                         // necessary evil as we need to break out of two loops
                         goto out;
@@ -82,4 +85,3 @@ void Graph::initialize_graph() {
         out:;
     }
 }
-
