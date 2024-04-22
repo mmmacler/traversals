@@ -29,4 +29,8 @@ public:
     Graph() {
         initialize_graph();
     };
+
+    // returns sum of shortest distance
+    float Dijkstras(pair<int, int> from, pair<int, int> to);
+    float A_star(pair<int, int> from, pair<int, int> to);
 };

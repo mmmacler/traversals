@@ -4,6 +4,10 @@
 #include <map>
 #include <random>
 #include "graph.h"
+#include <set>
+#include <queue>
+#include <stack>
+#include <climits>
 using namespace::std;
 //#define x_max 1840
 //#define y_max 1000
@@ -84,4 +88,55 @@ void Graph::initialize_graph() {
         }
         out:;
     }
+}
+
+float Graph::Dijkstras(pair<int, int> from, pair<int, int> to) {
+    /*
+        returns the sum of weights of all edges of shortest path
+        connecting the from and to vertex. Returns 0 if no edges
+        connect the two vertices.
+        sources: https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
+    */
+
+    priority_queue<pair<pair<int, int>, int>, vector<pair<pair<int,int>, int>>, greater<>> pq;
+    map<pair<int, int>, float> d;
+    d[from] = 0;
+    map<pair<int, int>, pair<int, int>> p;
+    pq.emplace(from, 0);
+
+
+    while (!pq.empty()) {
+        pair<int, int> u = pq.top().first;
+        pq.pop();
+
+        for (auto i: vertices[u] ) {
+            pair<int, int> v = i.first;
+            float w = i.second;
+            if (d[u] + w < d[v]) {
+
+                d[v] = d[u] + w;
+                p[v] = u;
+                pq.emplace(v, d[v]);
+            }
+        }
+    }
+
+    std::stack<float> path;
+    pair<int, int> val = to;
+    while (val != from) {
+        path.push(d[val]);
+        val = p[val];
+    }
+
+    float sum = 0;
+    while (!path.empty()) {
+        sum += path.top();
+        path.pop();
+    }
+
+    return sum;
+}
+
+void Graph::A_star(pair<int, int> from, pair<int, int> to) {
+
 }
