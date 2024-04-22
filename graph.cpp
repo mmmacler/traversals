@@ -158,10 +158,10 @@ float Graph::Bellman_Ford(pair<int, int> from, pair<int, int> to) {
         for (auto j: vertices[i.first]) {
             pair<int, int> u = i.first;
             pair<int, int> v = j.first;
-            float weight = j.second;
-            if (d[u] != 0
-                && d[u] + weight < d[v])
-                d[v] = d[u] + weight;
+            float w = j.second;
+            if (d[u] == 0
+                || d[u] + w < d[v])
+                d[v] = d[u] + w;
         }
     }
 
