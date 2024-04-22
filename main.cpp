@@ -10,8 +10,8 @@
 using namespace::std;
 //#define x_max 1840
 //#define y_max 1000
-#define x_max 300
-#define y_max 170
+#define x_max 600
+#define y_max 500
 
 // settings for how to draw vertices and edges
 #define multiplier 14
@@ -42,7 +42,15 @@ int main() {
     
     // opens the window at 1840x1000 resolution with the title "Traversals"
     sf::RenderWindow window(sf::VideoMode(1840, 1000), "Traversals");
+    int rand1 = (rand() % my_graph->vertices.size() - 1) + 1;
+    int rand2 = (rand() % my_graph->vertices.size() - 1) + 1;
 
+    auto p1 = my_graph->vertices.begin();
+    advance(p1, rand1);
+    auto p2 = my_graph->vertices.begin();
+    advance(p2, rand2);
+
+    cout << my_graph->Dijkstras(p1->first, p2->first) << endl;
     // have the window display a 'View' rather than the raw objects
     // this is like having a movable camera show what's being rendered
     sf::View view({0, 0}, {x_max*multiplier, y_max*multiplier});

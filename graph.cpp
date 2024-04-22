@@ -7,12 +7,11 @@
 #include <set>
 #include <queue>
 #include <stack>
-#include <climits>
 using namespace::std;
 //#define x_max 1840
 //#define y_max 1000
-#define x_max 300
-#define y_max 170
+#define x_max 600
+#define y_max 500
 
 #define multiplier 14
 #define vertex_radius 6.5
@@ -106,7 +105,7 @@ float Graph::Dijkstras(pair<int, int> from, pair<int, int> to) {
     */
 
     // priority queue stores minimum distance to be relaxed
-    priority_queue<pair<pair<int, int>, float>, vector<pair<pair<int,int>, int>>, greater<>> pq;
+    priority_queue<pair<pair<int, int>, float>, vector<pair<pair<int,int>, float>>, greater<>> pq;
     map<pair<int, int>, float> d;
     d[from] = 0;
     map<pair<int, int>, pair<int, int>> p;
@@ -116,10 +115,12 @@ float Graph::Dijkstras(pair<int, int> from, pair<int, int> to) {
     while (!pq.empty()) {
         pair<int, int> u = pq.top().first;
         pq.pop();
-        //cout << vertices[u].size() << endl;
+        cout << vertices[u].size() << endl;
+
         for (auto i: vertices[u] ) {
             pair<int, int> v = i.first;
             float w = i.second;
+            cout << w << endl;
             if (d[u] + w < d[v] || d[v] == 0) {
                 d[v] = d[u] + w;
                 p[v] = u;
