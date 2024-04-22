@@ -93,6 +93,10 @@ void Graph::initialize_graph() {
     }
 }
 
+Graph::Graph() {
+    this->initialize_graph();
+}
+
 float Graph::Dijkstras(pair<int, int> from, pair<int, int> to) {
     /*
         returns the sum of weights of all edges of shortest path
