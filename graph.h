@@ -15,11 +15,11 @@ using namespace::std;
 
 class Graph {
 private:
-    // Maps the coordinate location of a vertex to an adjacency list of other vertices
+    // Maps the coordinate location of a vertex(first) to an adjacency list of other vertices(second)
         //The first value (pair) is the coordinate pair location of the vertex 
         //that this vertex is adjacent to.
         //The second value (float) is the weight of the edge.
-    map<pair<int, int>, map<pair<int, int>, float> adjacent_vertices> vertices;
+    map<pair<int, int>, map<pair<int, int>, float>> vertices;
 
     // This method generates the 100,000 vertices in our graph,
     // as well as the edges to go along with them.
