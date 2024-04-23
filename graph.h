@@ -28,6 +28,6 @@ private:
 public:
     Graph();
     // returns sum of shortest distance
-    float Dijkstras(pair<int, int> from, pair<int, int> to);
-    float Bellman_Ford(pair<int, int> from, pair<int, int> to);
+    vector<pair<int, int>> BFS(pair<int, int> from, pair<int, int> to);
+    vector<pair<int, int>> DFS(pair<int, int> from, pair<int, int> to);
 };

@@ -10,8 +10,8 @@
 using namespace::std;
 //#define x_max 1840
 //#define y_max 1000
-#define x_max 600
-#define y_max 500
+#define x_max 200
+#define y_max 200
 
 #define multiplier 14
 #define vertex_radius 6.5
@@ -95,69 +95,65 @@ void Graph::initialize_graph() {
 
 Graph::Graph() {
     this->initialize_graph();
+
 }
 
-float Graph::Dijkstras(pair<int, int> from, pair<int, int> to) {
-    /*
-        returns the sum of weights of all edges of shortest path
-        connecting the from and to vertex. Returns 0 if no edges
-        connect the two vertices.
-        sources: https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
-    */
-
-    // priority queue stores minimum distance to be relaxed
-    priority_queue<pair<pair<int, int>, float>, vector<pair<pair<int,int>, float>>, greater<>> pq;
-    map<pair<int, int>, float> d;
-    d[from] = 0;
-    map<pair<int, int>, pair<int, int>> p;
-    pq.emplace(from, 0);
-
-
-    while (!pq.empty()) {
-        pair<int, int> u = pq.top().first;
-        pq.pop();
-        cout << vertices[u].size() << endl;
-
-        for (auto i: vertices[u] ) {
-            pair<int, int> v = i.first;
-            float w = i.second;
-            cout << w << endl;
-            if (d[u] + w < d[v] || d[v] == 0) {
-                d[v] = d[u] + w;
-                p[v] = u;
-                pq.emplace(v, d[v]);
+vector<pair<int, int>> Graph::BFS(pair<int, int> from, pair<int, int> to) {
+    vector<pair<int, int>> path;
+    set<pair<int, int>> visited;
+    queue<pair<int, int>> q;
+    visited.insert(from);
+    q.push(from);
+    while(!q.empty())
+    {
+        pair<int, int> u = q.front();
+        q.pop();
+        for(auto v: vertices[u])
+        {
+            if(v.first == to)
+                for (int i = 0; i < q.size(); i++) {
+                    path.push_back(q.front());
+                    q.pop();
+                }
+            if ((visited.find(v.first) == visited.end()))
+            {
+                visited.insert(v.first);
+                q.push(v.first);
             }
         }
     }
-
-    return d[to];
+    return path;
 }
 
-float Graph::Bellman_Ford(pair<int, int> from, pair<int, int> to) {
+vector<pair<int, int>> Graph::DFS(pair<int, int> from, pair<int, int> to) {
     /*
         returns the sum of weights of all edges of shortest path
         connecting the from and to vertex. Returns 0 if no edges
         connect the two vertices.
         sources: https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/
     */
-    map<pair<int, int>, float> d;
-    d[from] = 0;
-    map<pair<int, int>, pair<int, int>> p;
-
-
-    // Step 2: Relax all edges |V| - 1 times. A simple
-    // shortest path from src to any other vertex can have
-    // at-most |V| - 1 edges
-    for (auto i: vertices) {
-        for (auto j: vertices[i.first]) {
-            pair<int, int> u = i.first;
-            pair<int, int> v = j.first;
-            float w = j.second;
-            if (d[u] == 0
-                || d[u] + w < d[v])
-                d[v] = d[u] + w;
+    vector<pair<int, int>> path;
+    set<pair<int, int>> visited;
+    stack<pair<int, int>> s;
+    visited.insert(from);
+    s.push(from);
+    while(!s.empty())
+    {
+        pair<int, int> u = s.top();
+        s.pop();
+        for(auto v: vertices[u])
+        {
+            if(v.first == to)
+                for (int i = 0; i < s.size(); i++) {
+                    path.push_back(s.top());
+                    s.pop();
+                }
+            if ((visited.find(v.first) == visited.end()))
+            {
+                visited.insert(v.first);
+                s.push(v.first);
+            }
         }
     }
-
-    return d[to];
+    return path;
 }
