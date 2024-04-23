@@ -1,6 +1,5 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <cmath>
-#include <iostream>
 #include <map>
 #include <random>
 #include "graph.h"
@@ -8,31 +7,26 @@
 #include <queue>
 #include <stack>
 using namespace::std;
-//#define x_max 1840
-//#define y_max 1000
-#define x_max 200
-#define y_max 200
 
 #define multiplier 14
 #define vertex_radius 6.5
-#define private public
 
-void Graph::initialize_graph() {
+void Graph::initialize_graph(int xmax, int ymax) {
     // Random number generation taken from
     // https://stackoverflow.com/questions/7560114/random-number-c-in-some-range
     // and
     // https://stackoverflow.com/questions/686353/random-float-number-generation
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distr(-(x_max/2), x_max/2);
+    std::uniform_int_distribution<> distr(-(xmax/2), xmax/2);
 
     // Generate the 100,000 vertices
     // Uses a 'while' loop in case we generate duplicate values
     // by chance, leading to less than 100k vertices
     // while (vertices.size() < 100000) {
-    while (vertices.size() < (x_max*y_max)/25 ) {
+    while (vertices.size() < (xmax*ymax)/25 ) {
         int x = distr(gen);
-        std::uniform_int_distribution<> distr(-(y_max/2), y_max/2);
+        std::uniform_int_distribution<> distr(-(ymax/2), ymax/2);
         int y = distr(gen);
         map<pair<int, int>, float> temp;
         vertices.insert({{x, y}, temp});
@@ -93,10 +87,10 @@ void Graph::initialize_graph() {
     }
 }
 
-Graph::Graph() {
-    this->initialize_graph();
-
+Graph::Graph(int xmax, int ymax) {
+    this->initialize_graph(xmax, ymax);
 }
+
 
 vector<pair<int, int>> Graph::BFS(pair<int, int> from, pair<int, int> to) {
     vector<pair<int, int>> path;
@@ -126,12 +120,6 @@ vector<pair<int, int>> Graph::BFS(pair<int, int> from, pair<int, int> to) {
 }
 
 vector<pair<int, int>> Graph::DFS(pair<int, int> from, pair<int, int> to) {
-    /*
-        returns the sum of weights of all edges of shortest path
-        connecting the from and to vertex. Returns 0 if no edges
-        connect the two vertices.
-        sources: https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/
-    */
     vector<pair<int, int>> path;
     set<pair<int, int>> visited;
     stack<pair<int, int>> s;
